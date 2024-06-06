@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Compteur jusqu au nouvel an</string>
+
+    <string name="day">jours</string>
+    <string name="hour">heures</string>
+    <string name="minute">minutes</string>
+    <string name="second">seconde</string>
+
+    <string name="newyear">JUSQU AU NOUVEL AN</string>
+    <string name="ny2024">2025</string>
+
+    <string name="newyertextplusyear">Jusqu au nouvel an 2025</string>
+
+    <string name="exsampletime">00</string>
+
+
+
+</resources>

@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Сountdown to New Year 2024</string>
+
+    <string name="day">days</string>
+    <string name="hour">hours</string>
+    <string name="minute">hours</string>
+    <string name="second">seconds</string>
+
+    <string name="newyear">UNTIL NEW YEAR</string>
+    <string name="ny2024">2024</string>
+
+    <string name="newyertextplusyear">Until New Year 2024 </string>
+
+    <string name="exsampletime">00</string>
+
+
+</resources>

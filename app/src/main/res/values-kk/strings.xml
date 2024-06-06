@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Жаңа жылға қанша күн қалды</string>
+
+    <string name="day">күндер</string>
+    <string name="hour">сағат</string>
+    <string name="minute">минут</string>
+    <string name="second">секунд</string>
+
+    <string name="newyear">ЖАҢА ЖЫЛҒА ДЕЙІН</string>
+    <string name="ny2024">2025</string>
+
+    <string name="newyertextplusyear">Жаңа 2025 жылға дейін </string>
+
+    <string name="exsampletime">00</string>
+
+
+
+</resources>

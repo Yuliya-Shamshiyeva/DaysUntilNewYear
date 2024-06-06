@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">距离新年倒计时</string>
+
+    <string name="day">天</string>
+    <string name="hour">小时</string>
+    <string name="minute">分钟</string>
+    <string name="second">秒</string>
+
+    <string name="newyear">直到新年结束</string>
+    <string name="ny2024">2025</string>
+
+    <string name="newyertextplusyear">剩余时间到 2025 年新年</string>
+
+    <string name="exsampletime">00</string>
+
+
+
+</resources>

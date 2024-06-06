@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Countdown bis Silvester</string>
+
+    <string name="day">tage</string>
+    <string name="hour">std.</string>
+    <string name="minute">protokoll</string>
+    <string name="second">sekund</string>
+
+    <string name="newyear">BIS ZUM NEUEN JAHR</string>
+    <string name="ny2024">2025</string>
+
+    <string name="newyertextplusyear">Bis Neujahr 2025</string>
+
+    <string name="exsampletime">00</string>
+
+
+
+</resources>

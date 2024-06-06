@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Новогодний счетчик дней</string>
+
+    <string name="day">дней</string>
+    <string name="hour">часов</string>
+    <string name="minute">минут</string>
+    <string name="second">секунд</string>
+
+    <string name="newyear">ДО НОВОГО ГОДА</string>
+    <string name="ny2024">2025</string>
+
+    <string name="newyertextplusyear">До Нового Года 2025</string>
+
+    <string name="exsampletime">00</string>
+
+
+
+</resources>
