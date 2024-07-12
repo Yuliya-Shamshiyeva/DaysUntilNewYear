@@ -71,7 +71,17 @@ public class Widget extends AppWidgetProvider {
                     views.setProgressBar(R.id.progress_bar, max, progress, false);
 
                     appWidgetManager.updateAppWidget(appWidgetId, views);
+
+
+                    //Для перехода
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    // Установка PendingIntent на корневой элемент
+                    views.setOnClickPendingIntent(R.id.widget_layout, pendingIntent);
+                    appWidgetManager.updateAppWidget(appWidgetId, views);
                 }
+
 
 
             }

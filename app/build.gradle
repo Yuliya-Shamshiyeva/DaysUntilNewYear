@@ -4,14 +4,14 @@ plugins {
 
 android {
     namespace 'space.clevercake.daysuntilnewyear'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "space.clevercake.daysuntilnewyear"
         minSdk 24
-        targetSdk 34
-        versionCode 8
-        versionName "3.0"
+        targetSdk 35
+        versionCode 9
+        versionName "3.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
