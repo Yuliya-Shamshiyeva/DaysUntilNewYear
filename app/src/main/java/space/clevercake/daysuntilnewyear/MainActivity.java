@@ -6,12 +6,15 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.WindowMetrics;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -19,16 +22,16 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 
-
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 
 public class MainActivity extends AppCompatActivity {
     final String LOG_TAG = "myLogs";
     public final static String WIDGET_PREF = "widget_pref";
     public final static String WIDGET_day = "widget_text_";
-    //////Реклама при открытииРеклама при открытии
-    /////
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +42,9 @@ public class MainActivity extends AppCompatActivity {
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION//скрываем нижнюю панель навигации
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);//появляется и исчезает
         setContentView(R.layout.activity_main);
-        /////Реклама баннер
-        AdView adView = (AdView)findViewById(R.id.adView);
-        AdRequest adRequest= new AdRequest.Builder()
-                .build();
-        adView.loadAd(adRequest);
-        /////Реклама баннер
+
+        loadBannerAd();
+
 
 
         Log.d(LOG_TAG, "onCreate config");//widget
@@ -124,6 +124,40 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void loadBannerAd() {
+        // Create a new ad view.
+        //////Реклама при открытииРеклама при открытии
+        /////
+        AdView adView = new AdView(this);
+        adView.setAdUnitId("ca-app-pub-9702271696859992/4380179857");
+//        adView.setAdUnitId("ca-app-pub-3940256099942544/2014213617");
+
+        adView.setAdSize(getAdSize());
+// Находим контейнер FrameLayout
+        AdView addContainerView = findViewById(R.id.adView);
+        // Replace ad container with new ad view.
+        addContainerView.removeAllViews();
+        addContainerView.addView(adView);
+
+        AdRequest adRequest= new AdRequest.Builder()
+                .build();
+        adView.loadAd(adRequest);
+        /////Реклама баннер
+    }
+
+    public AdSize getAdSize() {
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        int adWidthPixels = displayMetrics.widthPixels;
+
+        if (VERSION.SDK_INT >= VERSION_CODES.R) {
+            WindowMetrics windowMetrics = this.getWindowManager().getCurrentWindowMetrics();
+            adWidthPixels = windowMetrics.getBounds().width();
+        }
+
+        float density = displayMetrics.density;
+        int adWidth = (int) (adWidthPixels / density);
+        return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
+    }
 
 }
 
