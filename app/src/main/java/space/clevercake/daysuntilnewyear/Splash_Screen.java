@@ -18,12 +18,24 @@ import android.widget.TextView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.ump.ConsentDebugSettings;
+import com.google.android.ump.ConsentForm;
+import com.google.android.ump.ConsentInformation;
+import com.google.android.ump.ConsentRequestParameters;
+import com.google.android.ump.UserMessagingPlatform;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Splash_Screen extends AppCompatActivity {
     TextView txtView;
     private AppOpenManager appOpenManager;
     private CountDownTimer countDownTimer;
     private ProgressBar adsLoaderPbar;
+
+    private ConsentInformation consentInformation;
+    private final String TAG = "Splash_Screen";
+    // Use an atomic boolean to initialize the Google Mobile Ads SDK and load ads once.
+    private final AtomicBoolean isMobileAdsInitializeCalled = new AtomicBoolean(false);
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,12 +44,13 @@ public class Splash_Screen extends AppCompatActivity {
         //txtView = findViewById(R.id.txtApp_Name);
         adsLoaderPbar = findViewById(R.id.adsloader);
 
-        MobileAds.initialize(Splash_Screen.this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
-
-            }
-        });
+//        MobileAds.initialize(Splash_Screen.this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(@NonNull InitializationStatus initializationStatus) {
+//
+//            }
+//        });
+        showConsentForm();
 
         ConnectivityManager connectivityManager =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -89,6 +102,7 @@ public class Splash_Screen extends AppCompatActivity {
     }
 
 
+
     public void intentToHomeScreen() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -103,5 +117,74 @@ public class Splash_Screen extends AppCompatActivity {
     public void stopCountdown(){
         countDownTimer.cancel();
         Log.d("mmmm","stop countdown");
+    }
+
+
+
+
+    private void showConsentForm() {
+        ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(this)
+                .setDebugGeography(ConsentDebugSettings.DebugGeography.DEBUG_GEOGRAPHY_EEA)
+                .addTestDeviceHashedId("TEST-DEVICE-HASHED-ID")
+                .build();
+
+        ConsentRequestParameters params = new ConsentRequestParameters
+                .Builder()
+                .build();
+
+        consentInformation = UserMessagingPlatform.getConsentInformation(this);
+        consentInformation.requestConsentInfoUpdate(
+                this,
+                params,
+                (ConsentInformation.OnConsentInfoUpdateSuccessListener) () -> {
+                    UserMessagingPlatform.loadAndShowConsentFormIfRequired(
+                            this,
+                            (ConsentForm.OnConsentFormDismissedListener) loadAndShowError -> {
+                                if (loadAndShowError != null) {
+                                    // Consent gathering failed.
+                                    Log.w(TAG, String.format("%s: %s",
+                                            loadAndShowError.getErrorCode(),
+                                            loadAndShowError.getMessage()));
+                                }
+
+                                // Consent has been gathered.
+                                if (consentInformation.canRequestAds()) {
+                                    initializeMobileAdsSdk();
+                                }
+                            }
+                    );
+                },
+                (ConsentInformation.OnConsentInfoUpdateFailureListener) requestConsentError -> {
+                    // Consent gathering failed.
+                    Log.w(TAG, String.format("%s: %s",
+                            requestConsentError.getErrorCode(),
+                            requestConsentError.getMessage()));
+                });
+
+        // Check if you can initialize the Google Mobile Ads SDK in parallel
+        // while checking for new consent information. Consent obtained in
+        // the previous session can be used to request ads.
+        if (consentInformation.canRequestAds()) {
+            initializeMobileAdsSdk();
+        }
+    }
+    private void initializeMobileAdsSdk() {
+        if (isMobileAdsInitializeCalled.getAndSet(true)) {
+            return;
+        }
+
+        new Thread(
+                () -> {
+                    // Initialize the Google Mobile Ads SDK on a background thread.
+
+                    MobileAds.initialize(this, initializationStatus -> {});
+                    runOnUiThread(
+                            () -> {
+                                // TODO: Request an ad.
+                                // loadInterstitialAd();
+                            });
+
+                })
+                .start();
     }
 }
