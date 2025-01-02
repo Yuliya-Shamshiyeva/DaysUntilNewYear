@@ -26,7 +26,7 @@ public class Widget extends AppWidgetProvider {
         Calendar start_calendar = Calendar.getInstance();
         Calendar end_calendar = Calendar.getInstance();
 
-        end_calendar.set(2025, 0, 1, 0, 0, 0);
+        end_calendar.set(2026, 0, 1, 0, 0, 0);
 
 
         long todayTime = start_calendar.getTimeInMillis();

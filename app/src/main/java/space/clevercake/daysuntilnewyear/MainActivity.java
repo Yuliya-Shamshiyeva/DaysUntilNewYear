@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         Calendar start_calendar = Calendar.getInstance();
         Calendar end_calendar = Calendar.getInstance();
 
-        end_calendar.set(2025,0,1,0,0,0);//заканчивается календарь 1 января 2024
+        end_calendar.set(2026,0,1,0,0,0);//заканчивается календарь 1 января 2024
 
 
         long todayTime = start_calendar.getTimeInMillis();
