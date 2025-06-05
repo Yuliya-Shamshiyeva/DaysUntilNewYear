@@ -10,8 +10,8 @@ android {
         applicationId "space.clevercake.daysuntilnewyear"
         minSdk 24
         targetSdk 35
-        versionCode 13
-        versionName "4.2"
+        versionCode 14
+        versionName "4.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,6 +44,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 
     implementation 'com.google.android.gms:play-services-ads:22.5.0'
+
+//яндекс медиация
+    implementation 'com.yandex.ads.adapter:admob-mobileads:7.13.0.0'
 
     //GDPR
     implementation("com.google.android.ump:user-messaging-platform:3.0.0")

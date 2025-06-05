@@ -49,58 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(LOG_TAG, "onCreate config");//widget
 
-
-        //Добавляем для считывания наши текст вью
-        TextView daycount = findViewById(R.id.daycounter);
-        TextView hourcount = findViewById(R.id.hourcounter);
-        TextView mincount = findViewById(R.id.mincounter);
-        TextView seccount = findViewById(R.id.seccounter);
-
-        //Calendar позволяет преобразовать время в миллисекундах в более удобном виде - год, месяц, день, часы, минуты, секунды.
-        Calendar start_calendar = Calendar.getInstance();
-        Calendar end_calendar = Calendar.getInstance();
-
-        end_calendar.set(2026,0,1,0,0,0);//заканчивается календарь 1 января 2024
-
-
-        long todayTime = start_calendar.getTimeInMillis();
-        long nyTime = end_calendar.getTimeInMillis();
-        long countdowntoNY = nyTime-todayTime;
-
-        CountDownTimer countDownTimer = new CountDownTimer(countdowntoNY,1000) {//1000 = 1 секунда
-            @Override
-            public void onTick(long l) {
-                long days = TimeUnit.MILLISECONDS.toDays(l);//целочисленный тип содержащий практически бесконечное количество значений. Используется в случаях, где числа превосходят 2 миллиарда и стандартного int уже не хватает. Используется в повседневной жизни для создания уникальных значений.
-                l -= TimeUnit.DAYS.toMillis(days);
-
-                long hour = TimeUnit.MILLISECONDS.toHours(l);
-                l -= TimeUnit.HOURS.toMillis(hour);
-
-                long min = TimeUnit.MILLISECONDS.toMinutes(l);
-                l -= TimeUnit.MINUTES.toMillis(min);
-
-                long sec = TimeUnit.MILLISECONDS.toSeconds(l);
-
-                //вывод на экране
-                daycount.setText(" "+ days +" ");
-                hourcount.setText(" "+ hour +" ");
-                mincount.setText(" "+ min +" ");
-                seccount.setText(" "+ sec +" ");
-
-
-            }
-            //когда будет нг вывести надпись с новым годом
-            @Override
-            public void onFinish() {
-                daycount.setText(" ");
-                hourcount.setText(" ");
-                mincount.setText(" ");
-                seccount.setText(" ");
-
-
-            }
-        };
-        countDownTimer.start();//запуск класса
+        startCountdown();
         View snow = findViewById(R.id.snow);
         snow.setVisibility(View.INVISIBLE);
         final int[] x = {0};
@@ -158,7 +107,64 @@ public class MainActivity extends AppCompatActivity {
         int adWidth = (int) (adWidthPixels / density);
         return AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(this, adWidth);
     }
+    private void startCountdown() {
+        TextView daycount = findViewById(R.id.daycounter);
+        TextView hourcount = findViewById(R.id.hourcounter);
+        TextView mincount = findViewById(R.id.mincounter);
+        TextView seccount = findViewById(R.id.seccounter);
+        TextView newyertext = findViewById(R.id.newyertext);
+        TextView newyertextNum = findViewById(R.id.textView9);
 
+        Calendar now = Calendar.getInstance();
+        int currentYear = now.get(Calendar.YEAR);
+
+        // Новый год: 1 января следующего года
+        Calendar nextNY = Calendar.getInstance();
+        nextNY.set(currentYear + 1, Calendar.JANUARY, 1, 0, 0, 0);
+        newyertextNum.setText(String.valueOf(currentYear + 1));
+
+        long timeToNY = nextNY.getTimeInMillis() - now.getTimeInMillis();
+
+        CountDownTimer countDownTimer = new CountDownTimer(timeToNY, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                long days = TimeUnit.MILLISECONDS.toDays(millisUntilFinished);
+                millisUntilFinished -= TimeUnit.DAYS.toMillis(days);
+
+                long hours = TimeUnit.MILLISECONDS.toHours(millisUntilFinished);
+                millisUntilFinished -= TimeUnit.HOURS.toMillis(hours);
+
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished);
+                millisUntilFinished -= TimeUnit.MINUTES.toMillis(minutes);
+
+                long seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished);
+
+                // если время вышло — показываем поздравление
+                if (days == 0 && hours == 0 && minutes == 0 && seconds == 0) {
+                    newyertext.setText(R.string.happynewyear);
+                } else {
+                    newyertext.setText(R.string.newyertextplusyear);
+                    daycount.setText(" " + days + " ");
+                    hourcount.setText(" " + hours + " ");
+                    mincount.setText(" " + minutes + " ");
+                    seccount.setText(" " + seconds + " ");
+
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                // Показываем поздравление на 1 секунду
+                newyertext.setText(R.string.happynewyear);
+                // Запускаем новый таймер через секунду
+                new android.os.Handler().postDelayed(() -> {
+                    startCountdown(); // запускаем новый отсчёт до следующего года
+                }, 1000);
+            }
+        };
+
+        countDownTimer.start();
+    }
 }
 
 
