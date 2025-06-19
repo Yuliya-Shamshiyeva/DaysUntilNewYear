@@ -2,28 +2,31 @@ package space.clevercake.daysuntilnewyear;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.appwidget.AppWidgetManager;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Point;
-import android.os.Build;
+
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.view.WindowMetrics;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.AdapterStatus;
+import com.yandex.mobile.ads.banner.BannerAdSize;
+import com.yandex.mobile.ads.banner.BannerAdView;
+import com.yandex.mobile.ads.common.AdRequest;
+
 
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -36,18 +39,39 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         Window window = getWindow();
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION//скрываем нижнюю панель навигации
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);//появляется и исчезает
         setContentView(R.layout.activity_main);
+        new Thread(
+                () ->
 
-        loadBannerAd();
+                        // Initialize the Google Mobile Ads SDK on a background thread.
+                        MobileAds.initialize(
+                                this,
+                                initializationStatus -> {
+                                    Map<String, AdapterStatus> statusMap =
+                                            initializationStatus.getAdapterStatusMap();
+                                    for (String adapterClass : statusMap.keySet()) {
+                                        AdapterStatus status = statusMap.get(adapterClass);
+                                        Log.d(
+                                                "MyApp",
+                                                String.format(
+                                                        "Adapter name: %s, Description: %s, Latency: %d",
+                                                        adapterClass, status.getDescription(), status.getLatency()));
+                                    }
+                                    // Переключаемся в главный UI-поток
+                                    runOnUiThread(() -> {
+                                        loadBannerAd(); // Безопасно загружаем баннер
+                                    });
+                                }))
+                .start();
 
 
 
         Log.d(LOG_TAG, "onCreate config");//widget
+        showYandexBanner();
 
         startCountdown();
         View snow = findViewById(R.id.snow);
@@ -74,25 +98,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadBannerAd() {
-        // Create a new ad view.
-        //////Реклама при открытииРеклама при открытии
-        /////
-        AdView adView = new AdView(this);
-        adView.setAdUnitId("ca-app-pub-9702271696859992/4380179857");
-//        adView.setAdUnitId("ca-app-pub-3940256099942544/2014213617");
+        AdView adView = findViewById(R.id.adView);
 
-        adView.setAdSize(getAdSize());
-// Находим контейнер FrameLayout
-        AdView addContainerView = findViewById(R.id.adView);
-        // Replace ad container with new ad view.
-        addContainerView.removeAllViews();
-        addContainerView.addView(adView);
+        // Устанавливаем adUnitId и размер только ОДИН раз, если они ещё не были установлены
+        if (adView.getAdSize() == null) {
+            adView.setAdUnitId("ca-app-pub-9702271696859992/4380179857");
+            adView.setAdSize(getAdSize());
+        }
 
-        AdRequest adRequest= new AdRequest.Builder()
-                .build();
+        com.google.android.gms.ads.AdRequest adRequest = new com.google.android.gms.ads.AdRequest.Builder().build();
         adView.loadAd(adRequest);
-        /////Реклама баннер
     }
+
+
 
     public AdSize getAdSize() {
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
@@ -165,6 +183,17 @@ public class MainActivity extends AppCompatActivity {
 
         countDownTimer.start();
     }
+    private void showYandexBanner() {
+        BannerAdView yandexAdView = new BannerAdView(this);
+        yandexAdView.setAdUnitId("R-M-15755284-1");
+        yandexAdView.setAdSize(BannerAdSize.stickySize(this, 320));
+
+        LinearLayout layout = findViewById(R.id.yandex_ad_container); // добавь в xml
+        layout.addView(yandexAdView);
+
+        yandexAdView.loadAd(new AdRequest.Builder().build());
+    }
 }
+
 
 
