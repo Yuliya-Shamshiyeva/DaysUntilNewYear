@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="space.clevercake.daysuntilnewyear" />
+                  <option name="mobileSdkAppId" value="1:131221488643:android:087623d639b592fb68ba36" />
+                  <option name="projectId" value="daysuntilnewyear" />
+                  <option name="projectNumber" value="131221488643" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

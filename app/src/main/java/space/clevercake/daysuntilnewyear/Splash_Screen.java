@@ -52,12 +52,8 @@ public class Splash_Screen extends AppCompatActivity {
 //        });
         showConsentForm();
 
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
+        if (isInternetAvailable()) {
 
-
-        if (netInfo.isConnected() && netInfo != null) {
             appOpenManager = new AppOpenManager(Splash_Screen.this);
             appOpenManager.fetchAd(getResources().getString(R.string.app_open_id));
 
@@ -65,7 +61,7 @@ public class Splash_Screen extends AppCompatActivity {
 
                 public void onTick(long millisUntilFinished) {
 
-                    if (AppOpenManager.adsisLoaded() == true) {
+                    if (AppOpenManager.adsisLoaded()) {
                         adsLoaderPbar.setVisibility(View.GONE);
                         appOpenManager.showAdIfAvailable();
                         countDownTimer.cancel();
@@ -77,7 +73,7 @@ public class Splash_Screen extends AppCompatActivity {
                 public void onFinish() {
 //                    txtTitle.setText("done!");
 
-                    if (AppOpenManager.adsisLoaded() != true) {
+                    if (!AppOpenManager.adsisLoaded()) {
                         intentToHomeScreen();
                         adsLoaderPbar.setVisibility(View.GONE);
                     }
@@ -187,4 +183,24 @@ public class Splash_Screen extends AppCompatActivity {
                 })
                 .start();
     }
+    private boolean isInternetAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                android.net.Network network = connectivityManager.getActiveNetwork();
+                if (network == null) return false;
+
+                android.net.NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+                return capabilities != null &&
+                        (capabilities.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI)
+                                || capabilities.hasTransport(android.net.NetworkCapabilities.TRANSPORT_CELLULAR)
+                                || capabilities.hasTransport(android.net.NetworkCapabilities.TRANSPORT_ETHERNET));
+            } else {
+                android.net.NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+                return networkInfo != null && networkInfo.isConnected();
+            }
+        }
+        return false;
+    }
+
 }

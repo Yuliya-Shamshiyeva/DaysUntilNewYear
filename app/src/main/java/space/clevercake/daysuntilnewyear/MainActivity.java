@@ -1,6 +1,8 @@
 package space.clevercake.daysuntilnewyear;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
 
 import android.os.Bundle;
@@ -23,9 +25,17 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.AdapterStatus;
+import com.yandex.mobile.ads.appopenad.AppOpenAd;
+import com.yandex.mobile.ads.appopenad.AppOpenAdLoadListener;
+import com.yandex.mobile.ads.appopenad.AppOpenAdLoader;
 import com.yandex.mobile.ads.banner.BannerAdSize;
 import com.yandex.mobile.ads.banner.BannerAdView;
 import com.yandex.mobile.ads.common.AdRequest;
+import com.yandex.mobile.ads.common.AdRequestConfiguration;
+import com.yandex.mobile.ads.common.AdRequestError;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
 
 import android.os.Build.VERSION;
@@ -36,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
     public final static String WIDGET_PREF = "widget_pref";
     public final static String WIDGET_day = "widget_text_";
 
+    private AppOpenAdLoader appOpenAdLoader;
+    private AppOpenAd mAppOpenAd;
+    private final String AD_UNIT_ID = "demo-appopenad-yandex"; // R-M-15755284-2 пока можно использовать демо
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -44,6 +58,26 @@ public class MainActivity extends AppCompatActivity {
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION//скрываем нижнюю панель навигации
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);//появляется и исчезает
         setContentView(R.layout.activity_main);
+
+        //Инициализация и загрузка рекламы яндекс старт
+        com.yandex.mobile.ads.common.MobileAds.initialize(this, () -> {
+            // Инициализация завершена — создаём загрузчик
+            appOpenAdLoader = new AppOpenAdLoader(this);
+            appOpenAdLoader.setAdLoadListener(appOpenAdLoadListener);
+
+            // Загружаем рекламу
+            AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(AD_UNIT_ID).build();
+            appOpenAdLoader.loadAd(adRequestConfiguration);
+        });
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(new DefaultLifecycleObserver() {
+            @Override
+            public void onStart(@NonNull LifecycleOwner owner) {
+                showAppOpenAd(); // показать рекламу, если доступна
+            }
+        });
+
+
+
         new Thread(
                 () ->
 
@@ -96,6 +130,34 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    //метод показа
+    private void showAppOpenAd() {
+        if (mAppOpenAd != null) {
+            mAppOpenAd.show(this);
+            mAppOpenAd = null; // сбрасываем, чтобы повторно не показывать
+            // можно сразу заново загружать следующую
+            AdRequestConfiguration adRequestConfiguration = new AdRequestConfiguration.Builder(AD_UNIT_ID).build();
+            appOpenAdLoader.loadAd(adRequestConfiguration);
+        } else {
+            Log.d(LOG_TAG, "AppOpenAd not ready");
+        }
+    }
+    //слушатель загрузки
+    private final AppOpenAdLoadListener appOpenAdLoadListener = new AppOpenAdLoadListener() {
+        @Override
+        public void onAdLoaded(@NonNull AppOpenAd appOpenAd) {
+            Log.d(LOG_TAG, "AppOpenAd загружена");
+            mAppOpenAd = appOpenAd;
+        }
+
+        @Override
+        public void onAdFailedToLoad(@NonNull AdRequestError adRequestError) {
+            Log.e(LOG_TAG, "Ошибка загрузки AppOpenAd: " + adRequestError.getDescription());
+        }
+    };
+
+
 
     private void loadBannerAd() {
         AdView adView = findViewById(R.id.adView);

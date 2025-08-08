@@ -1,5 +1,6 @@
 plugins {
     id 'com.android.application'
+    id 'com.google.gms.google-services'
 }
 
 android {
@@ -10,8 +11,8 @@ android {
         applicationId "space.clevercake.daysuntilnewyear"
         minSdk 24
         targetSdk 35
-        versionCode 16
-        versionName "5.1"
+        versionCode 17
+        versionName "5.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -29,6 +30,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.firebase:firebase-analytics:23.0.0'
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
@@ -50,4 +52,5 @@ dependencies {
 
     //GDPR
     implementation("com.google.android.ump:user-messaging-platform:3.0.0")
+
 }
