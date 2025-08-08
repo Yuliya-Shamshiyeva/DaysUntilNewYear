@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppOpenAdLoader appOpenAdLoader;
     private AppOpenAd mAppOpenAd;
-    private final String AD_UNIT_ID = "demo-appopenad-yandex"; // R-M-15755284-2 пока можно использовать демо
+    private final String AD_UNIT_ID = "R-M-15755284-2"; // R-M-15755284-2 пока можно использовать демо
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
