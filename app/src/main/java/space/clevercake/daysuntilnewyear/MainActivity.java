@@ -25,6 +25,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.AdapterStatus;
+import com.my.tracker.MyTracker;
 import com.yandex.mobile.ads.appopenad.AppOpenAd;
 import com.yandex.mobile.ads.appopenad.AppOpenAdLoadListener;
 import com.yandex.mobile.ads.appopenad.AppOpenAdLoader;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private AppOpenAdLoader appOpenAdLoader;
     private AppOpenAd mAppOpenAd;
     private final String AD_UNIT_ID = "R-M-15755284-2"; // R-M-15755284-2 пока можно использовать демо
-
+    private final String SDK_KEY = "NQn9p7RUNYNRJE35KGFN0t";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -58,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION//скрываем нижнюю панель навигации
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);//появляется и исчезает
         setContentView(R.layout.activity_main);
-
+// Инициализируйте трекер vk
+        MyTracker.initTracker(SDK_KEY, getApplication());
+        MyTracker.trackLaunchManually(this);
         //Инициализация и загрузка рекламы яндекс старт
         com.yandex.mobile.ads.common.MobileAds.initialize(this, () -> {
             // Инициализация завершена — создаём загрузчик
