@@ -11,7 +11,7 @@ android {
         applicationId "space.clevercake.daysuntilnewyear"
         minSdk 24
         targetSdk 35
-        versionCode 17
+        versionCode 18
         versionName "5.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
