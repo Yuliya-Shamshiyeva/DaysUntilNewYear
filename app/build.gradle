@@ -11,8 +11,8 @@ android {
         applicationId "space.clevercake.daysuntilnewyear"
         minSdk 24
         targetSdk 35
-        versionCode 18
-        versionName "5.3"
+        versionCode 19
+        versionName "5.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,6 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
 }
 
 dependencies {
@@ -53,6 +54,11 @@ dependencies {
     //GDPR
     implementation("com.google.android.ump:user-messaging-platform:3.0.0")
 
-
+//вк
     implementation 'com.my.tracker:mytracker-sdk:3.3.+'
+
+    //аппловин
+    implementation("com.google.ads.mediation:applovin:13.4.0.0")     // адаптер AppLovin
+    implementation 'com.yandex.ads.mediation:mobileads-applovin:13.1.0.7'
+    implementation 'com.applovin:applovin-sdk:+'
 }

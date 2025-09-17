@@ -19,6 +19,10 @@ import java.util.Calendar;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import com.applovin.sdk.AppLovinMediationProvider;
+import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.AppLovinSdkConfiguration;
+import com.applovin.sdk.AppLovinSdkInitializationConfiguration;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
@@ -50,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private AppOpenAdLoader appOpenAdLoader;
     private AppOpenAd mAppOpenAd;
     private final String AD_UNIT_ID = "R-M-15755284-2"; // R-M-15755284-2 пока можно использовать демо
-    private final String SDK_KEY = "NQn9p7RUNYNRJE35KGFN0t";
+    private final String SDK_KEY = "29404287850302077906";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -59,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
         window.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION//скрываем нижнюю панель навигации
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);//появляется и исчезает
         setContentView(R.layout.activity_main);
+
 // Инициализируйте трекер vk
         MyTracker.initTracker(SDK_KEY, getApplication());
         MyTracker.trackLaunchManually(this);
