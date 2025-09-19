@@ -24,8 +24,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
 }
@@ -46,19 +46,19 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
 // Google Ads SDK
-    implementation 'com.google.android.gms:play-services-ads:23.5.0'
+    implementation 'com.google.android.gms:play-services-ads:24.6.0'
 
 // Яндекс SDK
-    implementation 'com.yandex.android:mobileads:7.13.0'
+    implementation 'com.yandex.android:mobileads:7.15.2'
 
     //GDPR
-    implementation("com.google.android.ump:user-messaging-platform:3.0.0")
+    implementation("com.google.android.ump:user-messaging-platform:3.2.0")
 
 //вк
-    implementation 'com.my.tracker:mytracker-sdk:3.3.+'
+    implementation 'com.my.tracker:mytracker-sdk:3.5.0'
 
     //аппловин
-    implementation("com.google.ads.mediation:applovin:13.4.0.0")     // адаптер AppLovin
-    implementation 'com.yandex.ads.mediation:mobileads-applovin:13.1.0.7'
-    implementation 'com.applovin:applovin-sdk:+'
+    implementation("com.google.ads.mediation:applovin:13.1.0.0")  // адаптер AppLovin
+    implementation 'com.yandex.ads.mediation:mobileads-applovin:13.1.0.8'
+    implementation 'com.applovin:applovin-sdk:13.1.0'
 }
